@@ -34,6 +34,11 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleMutation(w http.ResponseWriter, r *http.Request) {
+	debug := os.Getenv("LOGLEVEL") == "DEBUG"
+	if debug {
+		fmt.Println("handleMutation called")
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 
@@ -42,8 +47,6 @@ func handleMutation(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%s", err)
 		return
 	}
-
-	debug := os.Getenv("LOGLEVEL") == "DEBUG"
 
 	registry := os.Getenv("REGISTRY_URL")
 
@@ -75,6 +78,5 @@ func main() {
 		MaxHeaderBytes: 1 << 20, // 1048576
 	}
 
-	// TODO: fix SSL certificate
-	log.Fatal(s.ListenAndServe()) //"./ssl/mutateme.pem", "./ssl/mutateme.key"))
+	log.Fatal(s.ListenAndServeTLS("/tls/cert.pem", "/tls/key.pem"))
 }
