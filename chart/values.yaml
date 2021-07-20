@@ -1,0 +1,25 @@
+replicaCount: 2
+image:
+  repository: 289983928765.dkr.ecr.eu-west-1.amazonaws.com/k8s-proxy-image-swapper
+  pullPolicy: IfNotPresent
+  tag: "v0.1.0"
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  # readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+enableDebug: false
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+caBundle: {}

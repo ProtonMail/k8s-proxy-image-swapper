@@ -12,7 +12,7 @@ webhooks:
     operations:  ["CREATE"]
     resources:   ["pods"]
   clientConfig:
-    caBundle: {}
+    caBundle: {{ .Values.caBundle }}
     service:
       namespace: "kube-system"
       name: "k8s-pisw"

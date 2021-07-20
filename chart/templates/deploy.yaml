@@ -7,7 +7,7 @@ metadata:
   labels:
     app: k8s-proxy-image-swapper-webhook
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: k8s-proxy-image-swapper-webhook
@@ -16,14 +16,19 @@ spec:
       labels:
         app: k8s-proxy-image-swapper-webhook
     spec:
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
       containers:
       - name: k8s-proxy-image-swapper-webhook
         env:
+        {{- if .Values.enableDebug -}}
         - name: LOGLEVEL
           value: DEBUG
+        {{- end }}
         - name: REGISTRY_URL
-          value: "toto.io"
-        image: docker.io/j4m3s/k8s-proxy-image-swapper:latest
+          value: "docker-registry-internal.ehp.red"
+        image: {{ .Values.image.repository}}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 8443
         volumeMounts:
@@ -31,24 +36,8 @@ spec:
           mountPath: "/tls"
           readOnly: true
         resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+          {{- toYaml .Values.resources | nindent 8 }}
       volumes:
       - name: k8s-proxy-image-swapper-tls-secret
         secret:
           secretName: k8s-proxy-image-swapper-tls-secret
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: kube-system
-  name: k8s-pisw
-spec:
-  type: ClusterIP
-  selector:
-    app: k8s-proxy-image-swapper-webhook
-  ports:
-  - protocol: TCP
-    port: 443
-    targetPort: 8443
