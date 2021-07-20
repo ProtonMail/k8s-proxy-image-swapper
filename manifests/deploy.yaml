@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kube-system
+  name: k8s-proxy-image-swapper-webhook-deployment
+  labels:
+    app: k8s-proxy-image-swapper-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-proxy-image-swapper-webhook
+  template:
+    metadata:
+      labels:
+        app: k8s-proxy-image-swapper-webhook
+    spec:
+      containers:
+      - name: k8s-proxy-image-swapper-webhook
+        env:
+        - name: LOGLEVEL
+          value: DEBUG
+        - name: REGISTRY_URL
+          value: "toto.io"
+        image: docker.io/j4m3s/k8s-proxy-image-swapper:latest
+        ports:
+        - containerPort: 8443
+        volumeMounts:
+        - name: k8s-proxy-image-swapper-tls-secret
+          mountPath: "/tls"
+          readOnly: true
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      volumes:
+      - name: k8s-proxy-image-swapper-tls-secret
+        secret:
+          secretName: k8s-proxy-image-swapper-tls-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-system
+  name: k8s-pisw
+spec:
+  type: ClusterIP
+  selector:
+    app: k8s-proxy-image-swapper-webhook
+  ports:
+  - protocol: TCP
+    port: 443
+    targetPort: 8443
