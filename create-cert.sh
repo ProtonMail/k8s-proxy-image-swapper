@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# This script comes from https://github.com/morvencao/kube-mutating-webhook-tutorial/
 set -e
 
 usage() {
