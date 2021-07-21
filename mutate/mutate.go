@@ -13,7 +13,8 @@ import (
 )
 
 func GetPatchedImageUrl(img, registry string) string {
-	if img == "registry" {
+	if strings.HasPrefix(img, "registry:") ||
+	   strings.Contains(img, "/registry:") {
 		return img
 	}
 
@@ -51,7 +52,8 @@ func getPatchFromContainerList(ctn []corev1.Container, registry string) []map[st
 		patchedImg := GetPatchedImageUrl(img, registry)
 
 		// In case there's a tag
-		if strings.HasPrefix(patchedImg, "docker.io/library/registry") {
+		if strings.HasPrefix(patchedImg, "docker.io/library/registry") ||
+		   strings.HasPrefix(patchedImg, "registry") {
 			// We don't patch the registry to avoid the bootstrap problem
 			continue
 		}
