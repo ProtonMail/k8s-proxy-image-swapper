@@ -26,7 +26,7 @@ spec:
           value: DEBUG
         {{- end }}
         - name: REGISTRY_URL
-          value: "docker-registry-internal.ehp.red"
+          value: {{ .Values.registryUrl }}
         image: {{ .Values.image.repository}}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
@@ -36,7 +36,7 @@ spec:
           mountPath: "/tls"
           readOnly: true
         resources:
-          {{- toYaml .Values.resources | nindent 8 }}
+          {{- toYaml .Values.resources | nindent 10 }}
       volumes:
       - name: k8s-proxy-image-swapper-tls-secret
         secret:
