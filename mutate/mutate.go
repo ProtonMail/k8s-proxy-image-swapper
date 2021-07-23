@@ -13,7 +13,8 @@ import (
 )
 
 func GetPatchedImageUrl(img, registry string) string {
-	if strings.HasPrefix(img, "registry:") ||
+	if img == "registry" ||
+	   strings.HasPrefix(img, "registry:") ||
 	   strings.Contains(img, "/registry:") {
 		return img
 	}
@@ -34,12 +35,21 @@ func GetPatchedImageUrl(img, registry string) string {
 
 	// Case toto/tata (and ! gcr.io/toto)
 	if len(imgArr) == 2 && !strings.Contains(imgUrl, ".") {
-		return fmt.Sprintf("%s/%s", registry, strings.Join(imgArr, "/"))
+		if img != "library/registry" &&
+		   !strings.HasPrefix(img, "library/registry:") &&
+		   !strings.Contains(img, "/library/registry:") {
+			return fmt.Sprintf("%s/%s", registry, strings.Join(imgArr, "/"))
+		}
+		return img
 	}
 
 	// Case docker.io/toto/tata
 	if imgUrl == "docker.io" {
-		return fmt.Sprintf("%s/%s", registry, imgName)
+		if img != "docker.io/library/registry" &&
+		!strings.HasPrefix(img, "docker.io/library/registry:") {
+			return fmt.Sprintf("%s/%s", registry, imgName)
+		}
+		return img
 	}
 	return img
 }

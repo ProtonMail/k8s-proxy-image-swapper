@@ -88,3 +88,32 @@ func TestForeignFullPathImage(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestRegistryImage(t *testing.T) {
+	if GetPatchedImageUrl("registry", "example.com") != "registry" {
+		t.Log("Error TestRegistryImage")
+		t.Fail()
+	}
+}
+
+func TestRegistryImageWithTag(t *testing.T) {
+	if GetPatchedImageUrl("registry:tag", "example.com") != "registry:tag" {
+		t.Log("Error TestRegistryImageWithTag")
+		t.Fail()
+	}
+}
+
+func TestRegistryPathImage(t *testing.T) {
+	if GetPatchedImageUrl("library/registry", "example.com") != "library/registry" {
+		t.Log("Error TestRegistryPathImage")
+		t.Fail()
+	}
+}
+
+
+func TestRegistryFullPathImage(t *testing.T) {
+	if GetPatchedImageUrl("docker.io/library/registry", "example.com") != "docker.io/library/registry" {
+		t.Log("Error TestRegistryFullPathImage")
+		t.Fail()
+	}
+}
