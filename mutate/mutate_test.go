@@ -2,109 +2,107 @@
 package mutate
 
 import "testing"
-import "fmt"
 
 func TestLibraryImage(t *testing.T) {
-	if GetPatchedImageUrl("busybox", "example.com") != "example.com/library/busybox" {
+	if GetPatchedImageUrl("busybox:toto", "example.com") != "example.com/library/busybox:toto" {
 		t.Log("Error TestLibraryImage")
 		t.Fail()
 	}
 }
 
 func TestLibraryImageWithTag(t *testing.T) {
-	if GetPatchedImageUrl("busybox:latest", "example.com") != "example.com/library/busybox:latest" {
+	if GetPatchedImageUrl("busybox", "example.com") != "example.com/library/busybox:latest" {
 		t.Log("Error TestLibraryImageWithTag")
 		t.Fail()
 	}
 }
 
 func TestNonLibraryImage(t *testing.T) {
-	if GetPatchedImageUrl("toto/tata", "example.com") != "example.com/toto/tata" {
+	if GetPatchedImageUrl("toto/tata:titi", "example.com") != "example.com/toto/tata:titi" {
 		t.Log("Error TestNonLibraryImage")
 		t.Fail()
 	}
 }
 
 func TestNonLibraryImageWithTag(t *testing.T) {
-	if GetPatchedImageUrl("toto/tata:latest", "example.com") != "example.com/toto/tata:latest" {
+	if GetPatchedImageUrl("toto/tata", "example.com") != "example.com/toto/tata:latest" {
 		t.Log("Error TestNonLibraryImageWithTag")
 		t.Fail()
 	}
 }
 
 func TestFullPathImage(t *testing.T) {
-	if GetPatchedImageUrl("example.org/toto/tata", "example.com") != "example.org/toto/tata" {
+	if GetPatchedImageUrl("example.org/toto/tata:titi", "example.com") != "example.org/toto/tata:titi" {
 		t.Log("Error TestFullPathImage")
 		t.Fail()
 	}
 }
 
 func TestFullPathImageWithTag(t *testing.T) {
-	if GetPatchedImageUrl("example.org/toto/tata:latest", "example.com") != "example.org/toto/tata:latest" {
+	if GetPatchedImageUrl("example.org/toto/tata", "example.com") != "example.org/toto/tata:latest" {
 		t.Log("Error TestFullPathImageWithTag")
 		t.Fail()
 	}
 }
 
 func TestFullPathImageFromDocker(t *testing.T) {
-	if GetPatchedImageUrl("docker.io/toto/tata", "example.com") != "example.com/toto/tata" {
+	if GetPatchedImageUrl("docker.io/toto/tata:titi", "example.com") != "example.com/toto/tata:titi" {
 		t.Log("Error TestFullPathImageFromDocker")
 		t.Fail()
 	}
 }
 
 func TestFullPathImageFromDockerWithTag(t *testing.T) {
-	if GetPatchedImageUrl("docker.io/toto/tata:latest", "example.com") != "example.com/toto/tata:latest" {
+	if GetPatchedImageUrl("docker.io/toto/tata", "example.com") != "example.com/toto/tata:latest" {
 		t.Log("Error TestFullPathImageFromDockerWithTag")
 		t.Fail()
 	}
 }
 
 func TestFullPathImageLibraryFromDocker(t *testing.T) {
-	if GetPatchedImageUrl("docker.io/busybox", "example.com") != "example.com/library/busybox" {
+	if GetPatchedImageUrl("docker.io/busybox:titi", "example.com") != "example.com/library/busybox:titi" {
 		t.Log("Error TestFullPathImageLibraryFromDocker")
 		t.Fail()
 	}
 }
 
 func TestFullPathImageLibraryFromDockerWithTag(t *testing.T) {
-	if GetPatchedImageUrl("docker.io/busybox:latest", "example.com") != "example.com/library/busybox:latest" {
+	if GetPatchedImageUrl("docker.io/busybox", "example.com") != "example.com/library/busybox:latest" {
 		t.Log("Error TestFullPathImageLibraryFromDockerWithTag")
 		t.Fail()
 	}
 }
 
 func TestForeignImage(t *testing.T) {
-	fmt.Println(GetPatchedImageUrl("gcr.io/busybox", "example.com"))
-	if GetPatchedImageUrl("gcr.io/busybox", "example.com") != "gcr.io/busybox" {
+	if GetPatchedImageUrl("gcr.io/busybox:titi", "example.com") != "gcr.io/busybox:titi" {
 		t.Log("Error TestForeignImage")
 		t.Fail()
 	}
 }
 
 func TestForeignFullPathImage(t *testing.T) {
-	if GetPatchedImageUrl("gcr.io/toto/tata", "example.com") != "gcr.io/toto/tata" {
+	if GetPatchedImageUrl("gcr.io/toto/tata:titi", "example.com") != "gcr.io/toto/tata:titi" {
 		t.Log("Error TestForeignFullPathImage")
 		t.Fail()
 	}
 }
 
 func TestRegistryImage(t *testing.T) {
-	if GetPatchedImageUrl("registry", "example.com") != "registry" {
+	if GetPatchedImageUrl("registry:titi", "example.com") != "docker.io/library/registry:titi" {
 		t.Log("Error TestRegistryImage")
 		t.Fail()
 	}
 }
 
 func TestRegistryImageWithTag(t *testing.T) {
-	if GetPatchedImageUrl("registry:tag", "example.com") != "registry:tag" {
+	if GetPatchedImageUrl("registry:tag", "example.com") != "docker.io/library/registry:tag" {
 		t.Log("Error TestRegistryImageWithTag")
 		t.Fail()
 	}
 }
 
 func TestRegistryPathImage(t *testing.T) {
-	if GetPatchedImageUrl("library/registry", "example.com") != "library/registry" {
+	if GetPatchedImageUrl("library/registry:titi", "example.com") != "docker.io/library/registry:titi" {
 		t.Log("Error TestRegistryPathImage")
 		t.Fail()
 	}
@@ -112,7 +110,7 @@ func TestRegistryPathImage(t *testing.T) {
 
 
 func TestRegistryFullPathImage(t *testing.T) {
-	if GetPatchedImageUrl("docker.io/library/registry", "example.com") != "docker.io/library/registry" {
+	if GetPatchedImageUrl("docker.io/library/registry", "example.com") != "docker.io/library/registry:latest" {
 		t.Log("Error TestRegistryFullPathImage")
 		t.Fail()
 	}

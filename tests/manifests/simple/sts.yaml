@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: test-sts
+  name: test-sts
+spec:
+  serviceName: "test-sts"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-sts
+  template:
+    metadata:
+      labels:
+        app: test-sts
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test-sts
+  name: test-sts
+spec:
+  selector:
+    app: test-sts
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
