@@ -23,6 +23,7 @@
       oci-k8s-proxy-image-swapper = pkgs.dockerTools.buildLayeredImage {
         name = "oci-k8s-proxy-image-swapper";
         contents = [ k8s-proxy-image-swapper ];
+        config.Cmd = [ "${k8s-proxy-image-swapper}/bin/k8s-proxy-image-swapper" ];
       };
     };
 
