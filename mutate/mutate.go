@@ -54,7 +54,7 @@ func GetPatchedImageUrl(img, registry string) string {
 	return img
 }
 
-func getPatchFromContainerList(ctn []corev1.Container, registry string) []map[string]string {
+func getPatchFromContainerList(ctn []corev1.Container, registry, containerType string) []map[string]string {
 	patchList := []map[string]string{}
 	for i := range ctn {
 		img := ctn[i].Image
@@ -75,7 +75,7 @@ func getPatchFromContainerList(ctn []corev1.Container, registry string) []map[st
 
 		patch := map[string]string{
 			"op":    "replace",
-			"path":  fmt.Sprintf("/spec/containers/%d/image", i),
+			"path":  fmt.Sprintf("/spec/%s/%d/image", containerType, i),
 			"value": patchedImg,
 		}
 		patchList = append(patchList, patch)
@@ -124,8 +124,8 @@ func Mutate(body []byte, verbose bool, registry string) ([]byte, error) {
 		"k8s-proxy-image-swapper": "mutated",
 	}
 
-	patchList := getPatchFromContainerList(pod.Spec.Containers, registry)
-	patchList = append(patchList, getPatchFromContainerList(pod.Spec.InitContainers, registry)...)
+	patchList := getPatchFromContainerList(pod.Spec.Containers, registry, "containers")
+	patchList = append(patchList, getPatchFromContainerList(pod.Spec.InitContainers, registry, "initContainers")...)
 	resp.Patch, err = json.Marshal(patchList)
 
 	// We cannot fail

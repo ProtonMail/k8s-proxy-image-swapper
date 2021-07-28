@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test-deploy
+  name: test-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-deploy
+  template:
+    metadata:
+      labels:
+        app: test-deploy
+    spec:
+      initContainers:
+      - image: busybox:1.33
+        args:
+        - ls
+        name: init
+      containers:
+      - image: nginx
+        name: nginx
