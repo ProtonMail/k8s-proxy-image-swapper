@@ -18,3 +18,8 @@ In order to do that the script `./create-cert.sh` will help you.
 For more information, use `./create-cert.sh -h`.
 
 Certificate is valid for one year.
+
+## In case of any problem :
+`k delete mutatingwebhookconfiguration k8s-proxy-image-swapper-webhook` to
+delete the webhook and unblock your cluster. Upgrade the chart to reinstate
+the webhook.
