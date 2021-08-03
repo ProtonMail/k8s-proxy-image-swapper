@@ -185,6 +185,15 @@ func Mutate(body []byte, verbose bool, registry string) ([]byte, error) {
 
 	patchList := getPatchFromContainerList(pod.Spec.Containers, registry, "containers")
 	patchList = append(patchList, getPatchFromContainerList(pod.Spec.InitContainers, registry, "initContainers")...)
+	annotationsPatch := map[string]string{
+		"op":    "add",
+		"path":  "/metadata/labels/k8s-proxy-image-swapper",
+		"value": "patched-image",
+	}
+	if len(patchList) != 0 {
+		patchList = append(patchList, annotationsPatch)
+	}
+
 	resp.Patch, err = json.Marshal(patchList)
 
 	// We cannot fail
