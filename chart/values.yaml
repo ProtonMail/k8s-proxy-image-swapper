@@ -1,8 +1,8 @@
 replicaCount: 2
 image:
-  repository: 289983928765.dkr.ecr.eu-west-1.amazonaws.com/k8s-proxy-image-swapper
+  repository: registry.example.com/toto/k8s-proxy-image-swapper
   pullPolicy: IfNotPresent
-  tag: "v0.1.0"
+  tag: "v0.2.0"
 
 securityContext:
  #capabilities:
@@ -22,4 +22,10 @@ resources:
     memory: "128Mi"
     cpu: "500m"
 
+# You can obtain this value the following way :
+# kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}'
+# Note that this doesn't work on k3s since CAs are used differently. You need to
+# use the CA base64 in /var/lib/rancher/k3s/server/tls/server-ca.crt
 caBundle: {}
+# This must be resolvable from inside the cluster (on the nodes)
+registryUrl: docker-registry-internal.example.com
