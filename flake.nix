@@ -12,7 +12,7 @@
         CGO_ENABLED = "0";
 
         pname = "k8s-proxy-image-swapper";
-        version = "0.1.0";
+        version = "0.2.0";
 
         src = ./.;
 
