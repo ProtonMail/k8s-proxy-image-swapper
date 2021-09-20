@@ -11,7 +11,7 @@ import (
 	"log"
 	"net/http"
 	"time"
-	m "github.com/j4m3s-s/k8s-proxy-image-swapper/mutate"
+	m "github.com/Polyconseil/k8s-proxy-image-swapper/mutate"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
