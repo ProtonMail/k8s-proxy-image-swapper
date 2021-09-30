@@ -4,10 +4,17 @@ This project patches pods' images on container and initContainers to
 proxy them from dockerhub to another registry (configurable via the variable
 PROXY\_URL).
 
-images patched by k8s-proxy-image-swapper (k8s-pisw) also have a label
+The goal is to counteract dockerhub rate limit by caching locally.
+(Note that this project only patches images name, to redirect them on a proxy registry;
+the official docker-registry can be configured as a proxy registry).
+
+Patching is done automatically, there is no need to change anything on
+your deployments.
+
+Images patched by k8s-proxy-image-swapper (k8s-pisw) also have a label
 "k8s-proxy-image-swapper: patched-image", to recognize them.
 
-## Setup
+# Setup
 
 To use this you need to create a secret which is a valid k8s secret.
 In order to do that the script `./create-cert.sh` will help you.
@@ -20,15 +27,18 @@ Currently the following command should be used :
 Certificate is valid for one year.
 
 Afterwards you can use the helm chart in ./chart to deploy this software.
-You need to have the image built and pushed on a custom registry,
-no exception is currently made on self currently.
+You need to have the image of the patcher built and pushed on a custom registry,
+because no exception is currently made on k8s-proxy-image-swapper (self).
 You need to provide the base64 of the CA for the cluster. Further details
 are available in ./chart/values.yaml.
 
 # Troubleshouting
 
-`k delete mutatingwebhookconfiguration k8s-proxy-image-swapper-webhook` to
-delete the webhook and unblock your cluster. Upgrade the chart to reinstate
+In case of issue with image patching, to remove image-swapper, use the following command:
+
+`kubectl delete mutatingwebhookconfiguration k8s-proxy-image-swapper-webhook`
+
+This will delete the webhook and unblock your cluster. Upgrade the chart to reinstate
 the webhook.
 
 # Inner working
@@ -70,11 +80,11 @@ The project follows a semver versionning scheme.
 
 # Architecture
 
-./main.go contains the setup code and configuration code.
-./mutate contains the code that patches the images. (if you ever modify this
+- ./main.go contains the setup code and configuration code.
+- ./mutate contains the code that patches the images. (if you ever modify this
 code, please run the tests and add or modify the tests accordingly).
-./chart contains the chart to deploy the software.
-./tests contains some manifests to help test the software.
+- ./chart contains the chart to deploy the software.
+- ./tests contains some manifests to help test the software.
 
 
 ## Building
