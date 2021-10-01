@@ -108,7 +108,6 @@ func TestRegistryPathImage(t *testing.T) {
 	}
 }
 
-
 func TestRegistryFullPathImage(t *testing.T) {
 	if GetPatchedImageUrl("docker.io/library/registry", "example.com") != "docker.io/library/registry:latest" {
 		t.Log("Error TestRegistryFullPathImage")

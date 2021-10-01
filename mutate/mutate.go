@@ -14,10 +14,10 @@ import (
 
 // registry/namespace/image:tag
 type DockerImageUrl struct {
-	registry string
+	registry  string
 	namespace string
-	image string
-	tag string
+	image     string
+	tag       string
 }
 
 // takes toto:tata or toto, gives tata or latest
@@ -28,13 +28,13 @@ func getImgTag(img string) string {
 		tag = imgTagArr[1]
 	}
 
-		return tag
+	return tag
 }
 
 // takes toto:tata or toto, gives toto
 func getImgName(img string) string {
-		imgTagArr := strings.Split(img, ":")
-		return imgTagArr[0]
+	imgTagArr := strings.Split(img, ":")
+	return imgTagArr[0]
 }
 
 func getDockerImageUrl(img string) DockerImageUrl {
@@ -43,49 +43,49 @@ func getDockerImageUrl(img string) DockerImageUrl {
 	if len(imgArr) == 1 {
 		// Case busybox or busybox:tag
 		return DockerImageUrl{
-			registry: "docker.io", // default
-			namespace: "library", // default
-			image: getImgName(img),
-			tag: getImgTag(img),
+			registry:  "docker.io", // default
+			namespace: "library",   // default
+			image:     getImgName(img),
+			tag:       getImgTag(img),
 		}
 	}
 
 	imgUrl := imgArr[0]
 	// Case docker.io/busybox
 	if len(imgArr) == 2 && imgUrl == "docker.io" {
-		return DockerImageUrl {
-			registry: imgUrl,
+		return DockerImageUrl{
+			registry:  imgUrl,
 			namespace: "library",
-			image: getImgName(imgArr[1]),
-			tag: getImgTag(imgArr[1]),
+			image:     getImgName(imgArr[1]),
+			tag:       getImgTag(imgArr[1]),
 		}
 	}
 
 	// Case toto/tata (and ! gcr.io/toto)
 	if len(imgArr) == 2 && !strings.Contains(imgUrl, ".") {
-		return DockerImageUrl {
-			registry: "docker.io",
+		return DockerImageUrl{
+			registry:  "docker.io",
 			namespace: imgArr[0],
-			image: getImgName(imgArr[1]),
-			tag: getImgTag(imgArr[1]),
+			image:     getImgName(imgArr[1]),
+			tag:       getImgTag(imgArr[1]),
 		}
 	}
 
 	if len(imgArr) == 2 && strings.Contains(imgUrl, ".") {
-	return DockerImageUrl {
-			registry: imgUrl,
+		return DockerImageUrl{
+			registry:  imgUrl,
 			namespace: "", // ??? TODO does it exist?
-			image: getImgName(imgArr[1]),
-			tag: getImgTag(imgArr[1]),
+			image:     getImgName(imgArr[1]),
+			tag:       getImgTag(imgArr[1]),
 		}
 	}
 
 	// case toto.io/tata/titi[:tag]
-	return DockerImageUrl {
-		registry: imgArr[0],
+	return DockerImageUrl{
+		registry:  imgArr[0],
 		namespace: imgArr[1],
-		image: getImgName(imgArr[2]),
-		tag: getImgTag(imgArr[2]),
+		image:     getImgName(imgArr[2]),
+		tag:       getImgTag(imgArr[2]),
 	}
 }
 
@@ -123,7 +123,7 @@ func getPatchFromContainerList(ctn []corev1.Container, registry, containerType s
 
 		// In case there's a tag
 		if strings.HasPrefix(patchedImg, "docker.io/library/registry") ||
-		   strings.HasPrefix(patchedImg, "registry") {
+			strings.HasPrefix(patchedImg, "registry") {
 			// We don't patch the registry to avoid the bootstrap problem
 			continue
 		}

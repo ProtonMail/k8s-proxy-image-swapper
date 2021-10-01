@@ -2,16 +2,15 @@
 
 package main
 
-
 import (
 	"fmt"
+	m "github.com/Polyconseil/k8s-proxy-image-swapper/mutate"
 	"html"
-	"os"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
-	m "github.com/Polyconseil/k8s-proxy-image-swapper/mutate"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +44,6 @@ func handleMutation(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(mutated)
 }
-
 
 func main() {
 	log.Println("Starting server ...")
