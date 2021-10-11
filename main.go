@@ -42,7 +42,10 @@ func handleMutation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(mutated)
+	_, err = w.Write(mutated)
+	if err != nil {
+		log.Println("Failed writing HTTP response")
+	}
 }
 
 func main() {
