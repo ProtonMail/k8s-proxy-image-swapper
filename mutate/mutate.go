@@ -13,7 +13,7 @@ import (
 )
 
 // registry/namespace/image:tag
-type DockerImageUrl struct {
+type dockerImageUrl struct {
 	registry  string
 	namespace string
 	image     string
@@ -37,12 +37,12 @@ func getImgName(img string) string {
 	return imgTagArr[0]
 }
 
-func getDockerImageUrl(img string) DockerImageUrl {
+func getDockerImageUrl(img string) dockerImageUrl {
 	imgArr := strings.Split(img, "/")
 	// Not prefixed with a site
 	if len(imgArr) == 1 {
 		// Case busybox or busybox:tag
-		return DockerImageUrl{
+		return dockerImageUrl{
 			registry:  "docker.io", // default
 			namespace: "library",   // default
 			image:     getImgName(img),
@@ -53,7 +53,7 @@ func getDockerImageUrl(img string) DockerImageUrl {
 	imgUrl := imgArr[0]
 	// Case docker.io/busybox
 	if len(imgArr) == 2 && imgUrl == "docker.io" {
-		return DockerImageUrl{
+		return dockerImageUrl{
 			registry:  imgUrl,
 			namespace: "library",
 			image:     getImgName(imgArr[1]),
@@ -63,7 +63,7 @@ func getDockerImageUrl(img string) DockerImageUrl {
 
 	// Case toto/tata (and ! gcr.io/toto)
 	if len(imgArr) == 2 && !strings.Contains(imgUrl, ".") {
-		return DockerImageUrl{
+		return dockerImageUrl{
 			registry:  "docker.io",
 			namespace: imgArr[0],
 			image:     getImgName(imgArr[1]),
@@ -72,7 +72,7 @@ func getDockerImageUrl(img string) DockerImageUrl {
 	}
 
 	if len(imgArr) == 2 && strings.Contains(imgUrl, ".") {
-		return DockerImageUrl{
+		return dockerImageUrl{
 			registry:  imgUrl,
 			namespace: "", // ??? TODO does it exist?
 			image:     getImgName(imgArr[1]),
@@ -81,7 +81,7 @@ func getDockerImageUrl(img string) DockerImageUrl {
 	}
 
 	// case toto.io/tata/titi[:tag]
-	return DockerImageUrl{
+	return dockerImageUrl{
 		registry:  imgArr[0],
 		namespace: imgArr[1],
 		image:     getImgName(imgArr[2]),
@@ -89,7 +89,7 @@ func getDockerImageUrl(img string) DockerImageUrl {
 	}
 }
 
-func (i DockerImageUrl) String() string {
+func (i dockerImageUrl) String() string {
 	if i.namespace == "" {
 		return fmt.Sprintf("%s/%s:%s",
 			i.registry,
@@ -103,7 +103,8 @@ func (i DockerImageUrl) String() string {
 		i.tag)
 }
 
-func GetPatchedImageUrl(img, registry string) string {
+
+func getPatchedImageUrl(img, registry string) string {
 	patchimg := getDockerImageUrl(img)
 
 	if patchimg.registry == "docker.io" &&
@@ -119,7 +120,7 @@ func getPatchFromContainerList(ctn []corev1.Container, registry, containerType s
 	for i := range ctn {
 		img := ctn[i].Image
 
-		patchedImg := GetPatchedImageUrl(img, registry)
+		patchedImg := getPatchedImageUrl(img, registry)
 
 		// In case there's a tag
 		if strings.HasPrefix(patchedImg, "docker.io/library/registry") ||
