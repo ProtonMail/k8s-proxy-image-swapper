@@ -21,7 +21,7 @@ spec:
       containers:
       - name: k8s-proxy-image-swapper-webhook
         env:
-        {{- if .Values.enableDebug -}}
+        {{ if .Values.enableDebug -}}
         - name: LOGLEVEL
           value: DEBUG
         {{- end }}
