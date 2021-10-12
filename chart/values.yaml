@@ -4,9 +4,20 @@ image:
   pullPolicy: IfNotPresent
   tag: "v0.3.0"
 
-config: |
+# Change config.{tlskeypath,tlscertpath} accordingly if you change this
+tlsdirpath: "/tls"
+
+enableMutatingWebhook: true
+
+# See example at the root of the repo in ./config.example.yml
+config:
   port: 8443
+  # change tlsdirpath path accordingly if you change this
   tlskeypath: "/tls/key.pem"
+  ignoreimages:
+    - registry
+    - registry.example.com/toto/k8s-proxy-image-swapper
+  # change tlsdirpath path accordingly if you change this
   tlscertpath: "/tls/cert.pem"
 
 securityContext:
@@ -32,5 +43,5 @@ resources:
 # Note that this doesn't work on k3s since CAs are used differently. You need to
 # use the CA base64 in /var/lib/rancher/k3s/server/tls/server-ca.crt
 caBundle: {}
-# This must be resolvable from inside the cluster (on the nodes)
+# This must be resolvable from inside the cluster (on the nodes) in HTTPS
 registryUrl: docker-registry-internal.example.com
