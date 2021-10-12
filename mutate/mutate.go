@@ -103,13 +103,20 @@ func (i dockerImageUrl) String() string {
 		i.tag)
 }
 
+func isSameImage(image1, image2 dockerImageUrl) bool {
+	return image1.registry == image2.registry &&
+		image1.namespace == image2.namespace &&
+		image1.image == image2.image
+}
 
 func getPatchedImageUrl(img, registry string) string {
 	patchimg := getDockerImageUrl(img)
 
-	if patchimg.registry == "docker.io" &&
-		patchimg.image != "registry" {
-		patchimg.registry = registry
+	for _, image := range Configuration.IgnoreImages {
+		if getDockerImageUrl(image).String() == patchimg.String() ||
+			isSameImage(getDockerImageUrl(image), patchimg) {
+			return patchimg.String()
+		}
 	}
 
 	return patchimg.String()
