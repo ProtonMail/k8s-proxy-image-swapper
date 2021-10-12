@@ -58,7 +58,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error opening %v : %v\n", os.Args[1], err)
 	}
-	defer configFile.Close()
 
 	var config m.Config
 	decoder := yaml.NewDecoder(configFile)
@@ -66,6 +65,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error reading config : %v\n", err)
 	}
+	configFile.Close()
 
 	m.Configuration = config
 
