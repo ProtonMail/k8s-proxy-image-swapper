@@ -119,6 +119,10 @@ func getPatchedImageUrl(img, registry string) string {
 		}
 	}
 
+	if patchimg.registry == "docker.io" {
+		patchimg.registry = registry
+	}
+
 	return patchimg.String()
 }
 
