@@ -16,14 +16,17 @@
 
         src = ./.;
 
-        vendorSha256 = "sha256-lJ/DPH8XqFHYtIBAwB9BH/TFc5Q4t2tfdx8uNcky+ek=";
+        vendorSha256 = "sha256-rHaqxAb27amS36msMo3Ry70UWzTbuK/jT4HLKkeDP4Y=";
         subPackages = [ "." ];
       };
 
       oci-k8s-proxy-image-swapper = pkgs.dockerTools.buildLayeredImage {
         name = "oci-k8s-proxy-image-swapper";
         contents = [ k8s-proxy-image-swapper ];
-        config.Cmd = [ "${k8s-proxy-image-swapper}/bin/k8s-proxy-image-swapper" ];
+        config = {
+          Entrypoint = [ "${k8s-proxy-image-swapper}/bin/k8s-proxy-image-swapper" ];
+          User = "1000:1000";
+        };
       };
     };
 
