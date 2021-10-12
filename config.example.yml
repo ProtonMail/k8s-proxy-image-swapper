@@ -1,0 +1,3 @@
+port: 8443
+tlskeypath: "/tls/key.pem"
+tlscertpath: "/tls/cert.pem"
