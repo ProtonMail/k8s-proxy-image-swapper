@@ -163,7 +163,7 @@ func Mutate(body []byte, verbose bool, registry string) ([]byte, error) {
 
 	admReview := v1beta1.AdmissionReview{}
 	if err := json.Unmarshal(body, &admReview); err != nil {
-		return nil, fmt.Errorf("Unmarshaling request error %s", err)
+		return nil, fmt.Errorf("Unmarshaling request error %w", err)
 	}
 
 	var err error
@@ -183,7 +183,7 @@ func Mutate(body []byte, verbose bool, registry string) ([]byte, error) {
 
 	if err := json.Unmarshal(ar.Object.Raw, &pod); err != nil {
 		log.Println("Unmarshal pod json error", err)
-		return nil, fmt.Errorf("Unmarshal pod json error %v", err)
+		return nil, fmt.Errorf("Unmarshal pod json error %w", err)
 	}
 
 	resp.Allowed = true
@@ -209,7 +209,7 @@ func Mutate(body []byte, verbose bool, registry string) ([]byte, error) {
 	resp.Patch, err = json.Marshal(patchList)
 	if err != nil {
 		log.Println("Error unmarshalling patchList into AdmissionResponse", err)
-		return nil, fmt.Errorf("Error unmarshalling patchList into AdmissionResponse %v", err)
+		return nil, fmt.Errorf("Error unmarshalling patchList into AdmissionResponse %w", err)
 	}
 
 	// We cannot fail

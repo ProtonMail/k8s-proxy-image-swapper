@@ -5,13 +5,13 @@ package main
 import (
 	"fmt"
 	m "github.com/Polyconseil/k8s-proxy-image-swapper/mutate"
+	"gopkg.in/yaml.v2"
 	"html"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"time"
-	"gopkg.in/yaml.v2"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
