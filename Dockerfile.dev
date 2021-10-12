@@ -7,7 +7,6 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 go build
 
-FROM scratch
-USER 1000
+FROM ubuntu:21.04
 COPY --from=build ./k8s-proxy-image-swapper .
-ENTRYPOINT [ "./k8s-proxy-image-swapper" ]
+ENTRYPOINT [ "sleep 1000000" ]
