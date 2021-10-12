@@ -49,31 +49,25 @@ func handleMutation(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type Config struct {
-	TLSCertPath string `yaml:"tlscertpath"`
-	TLSKeyPath  string `yaml:"tlskeypath"`
-	Port        string `yaml:"port"`
-}
-
 func main() {
 	if len(os.Args) == 1 {
-		fmt.Errorf("Usage : %v $CONFIG_FILE_PATH", os.Args[0])
+		log.Fatalf("Usage : %v $CONFIG_FILE_PATH\n", os.Args[0])
 		return
 	}
 	configFile, err := os.Open(os.Args[1])
 	if err != nil {
-		fmt.Errorf("Error opening %v : %v", os.Args[1], err)
-		return
+		log.Fatalf("Error opening %v : %v\n", os.Args[1], err)
 	}
 	defer configFile.Close()
 
-	var config Config
+	var config m.Config
 	decoder := yaml.NewDecoder(configFile)
 	err = decoder.Decode(&config)
 	if err != nil {
-		fmt.Errorf("Error reading config : %v", err)
-		return
+		log.Fatalf("Error reading config : %v\n", err)
 	}
+
+	m.Configuration = config
 
 	log.Println("Starting server ...")
 
@@ -83,7 +77,7 @@ func main() {
 	mux.HandleFunc("/mutate", handleMutation)
 
 	s := &http.Server{
-		Addr:           config.Port,
+		Addr:           ":" + config.Port,
 		Handler:        mux,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,

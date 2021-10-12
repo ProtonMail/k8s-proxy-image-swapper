@@ -1,0 +1,8 @@
+port: 8443
+# change tlsdirpath path accordingly if you change this
+tlskeypath: "/tls/key.pem"
+ignoreimages:
+  - registry
+  - registry.example.com/toto/k8s-proxy-image-swapper
+# change tlsdirpath path accordingly if you change this
+tlscertpath: "/tls/cert.pem"
