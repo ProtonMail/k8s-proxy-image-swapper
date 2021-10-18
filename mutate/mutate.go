@@ -133,13 +133,6 @@ func getPatchFromContainerList(ctn []corev1.Container, registry, containerType s
 
 		patchedImg := GetPatchedImageUrl(img, registry)
 
-		// In case there's a tag
-		if strings.HasPrefix(patchedImg, "docker.io/library/registry") ||
-			strings.HasPrefix(patchedImg, "registry") {
-			// We don't patch the registry to avoid the bootstrap problem
-			continue
-		}
-
 		// No need to patch if it's the same
 		if img == patchedImg {
 			continue
