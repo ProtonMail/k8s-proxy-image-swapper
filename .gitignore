@@ -1,3 +1,5 @@
 result*
 .*.*.sw*
 .*.sw*
+normalize-docker-image-name
+patch-docker-image-name

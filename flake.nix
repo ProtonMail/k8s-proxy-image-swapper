@@ -6,8 +6,30 @@
     packages.x86_64-linux =
     let
       pkgs = import nixpkgs { system = "x86_64-linux"; };
-
+      vendorSha256 = "sha256-rHaqxAb27amS36msMo3Ry70UWzTbuK/jT4HLKkeDP4Y=";
     in rec {
+      patch-docker-image-name = pkgs.buildGoModule {
+        CGO_ENABLED = "0";
+        pname = "patch-docker-image-name";
+        version = "0.1.0";
+
+        src = ./.;
+
+        vendorSha256 = vendorSha256;
+        subPackages = [ "cmd/patch-docker-image-name" ];
+      };
+
+      normalize-docker-image-name = pkgs.buildGoModule {
+        CGO_ENABLED = "0";
+        pname = "normalize-docker-image-name";
+        version = "0.1.0";
+
+        src = ./.;
+
+        vendorSha256 = vendorSha256;
+        subPackages = [ "cmd/normalize-docker-image-name" ];
+      };
+
       k8s-proxy-image-swapper = pkgs.buildGoModule {
         CGO_ENABLED = "0";
 
@@ -16,7 +38,7 @@
 
         src = ./.;
 
-        vendorSha256 = "sha256-rHaqxAb27amS36msMo3Ry70UWzTbuK/jT4HLKkeDP4Y=";
+        vendorSha256 = vendorSha256;
         subPackages = [ "." ];
       };
 
