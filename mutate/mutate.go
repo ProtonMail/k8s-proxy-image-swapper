@@ -109,7 +109,7 @@ func isSameImage(image1, image2 dockerImageUrl) bool {
 		image1.image == image2.image
 }
 
-func getPatchedImageUrl(img, registry string) string {
+func GetPatchedImageUrl(img, registry string) string {
 	patchimg := getDockerImageUrl(img)
 
 	for _, image := range Configuration.IgnoreImages {
@@ -131,7 +131,7 @@ func getPatchFromContainerList(ctn []corev1.Container, registry, containerType s
 	for i := range ctn {
 		img := ctn[i].Image
 
-		patchedImg := getPatchedImageUrl(img, registry)
+		patchedImg := GetPatchedImageUrl(img, registry)
 
 		// In case there's a tag
 		if strings.HasPrefix(patchedImg, "docker.io/library/registry") ||
