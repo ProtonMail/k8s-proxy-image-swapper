@@ -15,7 +15,7 @@
 
         src = ./.;
 
-        vendorSha256 = vendorSha256;
+        inherit vendorSha256;
         subPackages = [ "cmd/patch-docker-image-name" ];
       };
 
@@ -26,7 +26,7 @@
 
         src = ./.;
 
-        vendorSha256 = vendorSha256;
+        inherit vendorSha256;
         subPackages = [ "cmd/normalize-docker-image-name" ];
       };
 
@@ -38,7 +38,7 @@
 
         src = ./.;
 
-        vendorSha256 = vendorSha256;
+        inherit vendorSha256;
         subPackages = [ "." ];
       };
 
