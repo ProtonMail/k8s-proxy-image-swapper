@@ -20,5 +20,10 @@ webhooks:
       path: /mutate
   admissionReviewVersions: ["v1", "v1beta1"]
   sideEffects: None
-  timeoutSeconds: 10
+  # Set to ignore so that when no worker nodes are available,
+  # pods can still be scheduled.
+  # However, this might introduce failures that this service is there
+  # to prevent from happening.
+  failurePolicy: Ignore
+  timeoutSeconds: 1
 {{- end }}

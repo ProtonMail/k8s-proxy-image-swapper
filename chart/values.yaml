@@ -2,7 +2,7 @@ replicaCount: 2
 image:
   repository: registry.example.com/toto/k8s-proxy-image-swapper
   pullPolicy: IfNotPresent
-  tag: "v0.3.0"
+  tag: "v0.3.1"
 
 # Change config.{tlskeypath,tlscertpath} accordingly if you change this
 tlsdirpath: "/tls"

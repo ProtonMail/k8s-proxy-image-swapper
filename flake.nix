@@ -34,7 +34,7 @@
         CGO_ENABLED = "0";
 
         pname = "k8s-proxy-image-swapper";
-        version = "0.3.0";
+        version = "0.3.1";
 
         src = ./.;
 
