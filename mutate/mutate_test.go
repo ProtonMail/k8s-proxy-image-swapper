@@ -74,7 +74,7 @@ func TestImage(t *testing.T) {
 	}
 
 	for _, test := range testTable {
-		res := getPatchedImageUrl(test.image, test.registry)
+		res := GetPatchedImageUrl(test.image, test.registry)
 
 		if res != test.expected {
 			t.Errorf("Error test image : %v, registry : %v, expected : %v, got %v\n",
