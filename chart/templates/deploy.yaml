@@ -29,15 +29,26 @@ spec:
           value: {{ .Values.registryUrl }}
         image: {{ .Values.image.repository}}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: ["/config/config.yaml"]
         ports:
         - containerPort: 8443
         volumeMounts:
+        - name: k8s-proxy-image-swapper-config
+          mountPath: "/config"
+          readOnly: true
         - name: k8s-proxy-image-swapper-tls-secret
-          mountPath: "/tls"
+          mountPath: {{ .Values.tlsdirpath }}
           readOnly: true
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
       volumes:
+      - name: k8s-proxy-image-swapper-config
+        configMap:
+          optional: false
+          name: k8s-proxy-image-swapper-config
+          items:
+          - key: config.yaml
+            path: config.yaml
       - name: k8s-proxy-image-swapper-tls-secret
         secret:
           secretName: k8s-proxy-image-swapper-tls-secret
