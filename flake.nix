@@ -11,7 +11,7 @@
       patch-docker-image-name = pkgs.buildGoModule {
         CGO_ENABLED = "0";
         pname = "patch-docker-image-name";
-        version = "0.1.0";
+        version = "0.1.1";
 
         src = ./.;
 
@@ -22,7 +22,7 @@
       normalize-docker-image-name = pkgs.buildGoModule {
         CGO_ENABLED = "0";
         pname = "normalize-docker-image-name";
-        version = "0.1.0";
+        version = "0.1.1";
 
         src = ./.;
 
@@ -34,7 +34,7 @@
         CGO_ENABLED = "0";
 
         pname = "k8s-proxy-image-swapper";
-        version = "0.3.1";
+        version = "0.3.2";
 
         src = ./.;
 

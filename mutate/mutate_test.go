@@ -71,6 +71,11 @@ func TestImage(t *testing.T) {
 			registry: "example.com",
 			expected: "gcr.io/toto/tata:titi",
 		},
+		{
+			image:    "gcr.io/toto/tata:titi@sha256:XXXXX",
+			registry: "example.com",
+			expected: "gcr.io/toto/tata:titi@sha256:XXXXX",
+		},
 	}
 
 	for _, test := range testTable {

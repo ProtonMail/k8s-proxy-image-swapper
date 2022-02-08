@@ -24,8 +24,14 @@ type dockerImageUrl struct {
 func getImgTag(img string) string {
 	imgTagArr := strings.Split(img, ":")
 	tag := "latest"
-	if len(imgTagArr) == 2 {
-		tag = imgTagArr[1]
+
+	if len(imgTagArr) != 1 {
+		tag = ""
+		for _, v := range(imgTagArr[1:]) {
+			tag += v + ":"
+		}
+		// remove last ":"
+		tag = tag[:len(tag) - 1]
 	}
 
 	return tag
