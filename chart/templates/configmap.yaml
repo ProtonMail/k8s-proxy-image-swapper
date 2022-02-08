@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: k8s-proxy-image-swapper-config
+  namespace: kube-system
 data:
   config.yaml: |
 {{ .Values.config | toYaml | indent 4 -}}
