@@ -9,6 +9,15 @@ type TestImageCase struct {
 	expected string
 }
 
+func TestConcatenation(t *testing.T) {
+    arr := []string{"toto", "tata"}
+
+    result := concatenateStringArray(arr, ":")
+    if result != "toto:tata" {
+        t.Errorf("concatenation is not working properly")
+    }
+}
+
 func TestImage(t *testing.T) {
 	testTable := []TestImageCase{
 		{
@@ -72,9 +81,29 @@ func TestImage(t *testing.T) {
 			expected: "gcr.io/toto/tata:titi",
 		},
 		{
+			image:    "gcr.io/toto/tata@sha256:XXXXX",
+			registry: "example.com",
+			expected: "gcr.io/toto/tata@sha256:XXXXX",
+		},
+		{
 			image:    "gcr.io/toto/tata:titi@sha256:XXXXX",
 			registry: "example.com",
 			expected: "gcr.io/toto/tata:titi@sha256:XXXXX",
+		},
+		{
+			image:    "gcr.io/toto/tata/titi:tag",
+			registry: "example.com",
+			expected: "gcr.io/toto/tata/titi:tag",
+		},
+		{
+			image:    "registry.org/toto/tata/titi:tag",
+			registry: "example.com",
+			expected: "registry.org/toto/tata/titi:tag",
+		},
+		{
+			image:    "toto/tata/titi:tag",
+			registry: "example.com",
+			expected: "example.com/toto/tata/titi:tag",
 		},
 	}
 

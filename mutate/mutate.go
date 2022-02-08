@@ -43,6 +43,17 @@ func getImgName(img string) string {
 	return imgTagArr[0]
 }
 
+func concatenateStringArray(arr []string, separator string) string {
+    result := ""
+
+    for _, v := range arr {
+        result += v + separator
+    }
+    // remove last separator
+    result = result[: len(result) - len(separator)]
+    return result
+}
+
 func getDockerImageUrl(img string) dockerImageUrl {
 	imgArr := strings.Split(img, "/")
 	// Not prefixed with a site
@@ -87,12 +98,23 @@ func getDockerImageUrl(img string) dockerImageUrl {
 	}
 
 	// case toto.io/tata/titi[:tag]
-	return dockerImageUrl{
-		registry:  imgArr[0],
-		namespace: imgArr[1],
-		image:     getImgName(imgArr[2]),
-		tag:       getImgTag(imgArr[2]),
-	}
+	// or case toto.io/tata/titi/toto[:tag]
+	if strings.Contains(imgUrl, ".") {
+		return dockerImageUrl{
+			registry:  imgArr[0],
+		        namespace: concatenateStringArray(imgArr[1: len(imgArr) - 1], "/"),
+			image:     getImgName(imgArr[len(imgArr) - 1]),
+			tag:       getImgTag(imgArr[len(imgArr) - 1]),
+		}
+	} else {
+		// case toto/tata/titi:tag
+		return dockerImageUrl{
+			registry:  "docker.io",
+			namespace: concatenateStringArray(imgArr[: len(imgArr) - 1], "/"),
+			image:     getImgName(imgArr[len(imgArr) - 1]),
+			tag:       getImgTag(imgArr[len(imgArr) - 1]),
+		}
+    }
 }
 
 func (i dockerImageUrl) String() string {
