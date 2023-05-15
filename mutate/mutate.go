@@ -140,6 +140,7 @@ func isSameImage(image1, image2 dockerImageUrl) bool {
 func GetPatchedImageUrl(img, registry string) string {
 	patchimg := getDockerImageUrl(img)
 
+	// Ignore images from IgnoreImages
 	for _, image := range Configuration.IgnoreImages {
 		if getDockerImageUrl(image).String() == patchimg.String() ||
 			isSameImage(getDockerImageUrl(image), patchimg) {
@@ -147,8 +148,9 @@ func GetPatchedImageUrl(img, registry string) string {
 		}
 	}
 
-	if patchimg.registry == "docker.io" {
-		patchimg.registry = registry
+	// any.io/toto/tata -> proxy.io/any.io/toto/tata
+	if patchimg.registry != registry {
+		patchimg.registry = registry + "/" + patchimg.registry
 	}
 
 	return patchimg.String()
