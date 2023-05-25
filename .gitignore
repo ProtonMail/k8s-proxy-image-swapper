@@ -3,3 +3,4 @@ result*
 .*.sw*
 normalize-docker-image-name
 patch-docker-image-name
+k8s-proxy-image-swapper
