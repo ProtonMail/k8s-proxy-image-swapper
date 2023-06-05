@@ -4,9 +4,9 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: "k8s-proxy-image-swapper-webhook"
-  namespace: kube-system
+  namespace: {{ .Values.namespace }}
 webhooks:
-- name: "k8s-pisw.kube-system.svc"
+- name: "k8s-pisw.{{ .Values.namespace }}.svc"
   rules:
   - apiGroups:   [""]
     apiVersions: ["v1"]
@@ -15,7 +15,7 @@ webhooks:
   clientConfig:
     caBundle: {{ .Values.caBundle }}
     service:
-      namespace: "kube-system"
+      namespace: {{ .Values.namespace }}
       name: "k8s-pisw"
       path: /mutate
   admissionReviewVersions: ["v1", "v1beta1"]
