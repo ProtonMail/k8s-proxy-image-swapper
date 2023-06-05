@@ -4,6 +4,8 @@ image:
   pullPolicy: IfNotPresent
   tag: "v0.3.3"
 
+namespace: k8s_pisw
+
 # Change config.{tlskeypath,tlscertpath} accordingly if you change this
 tlsdirpath: "/tls"
 
