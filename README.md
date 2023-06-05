@@ -1,11 +1,12 @@
 # K8s proxy image swapper
 
-This project patches pods' images on container and initContainers to
-proxy them from dockerhub to another registry (configurable via the variable
-PROXY\_URL).
+This project redirects all public images to an (internal) proxy by dynamically
+renaming those images. The proxy is configured through `PROXY_URL`.
 
-The goal is to counteract dockerhub rate limit by caching locally.
-(Note that this project only patches images name, to redirect them on a proxy registry;
+The goal is to prevent errors from dockerhub usage rate limit by providing a
+cache as well as doing some security analysis on the proxy side.
+(Note that this project only patches images name, to redirect them on a proxy 
+registry; it does not deploy the proxy by itself.
 the official docker-registry can be configured as a proxy registry).
 
 Patching is done automatically, there is no need to change anything on
@@ -16,15 +17,8 @@ Images patched by k8s-proxy-image-swapper (k8s-pisw) also have a label
 
 # Setup
 
-To use this you need to create a secret which is a valid k8s secret.
-In order to do that the script `./create-cert.sh` will help you.
-
-Currently the following command should be used :
-```
-./create-cert.sh --secret k8s-proxy-image-swapper-tls-secret --namespace kube-system --service k8s-pisw
-```
-
-Certificate is valid for one year.
+Certificates are managed by Cert-manager. Be sure to install it on your cluster 
+before using this software.
 
 Afterwards you can use the helm chart in ./chart to deploy this software.
 You need to have the image of the patcher built and pushed on a custom registry,
@@ -48,7 +42,7 @@ to patch the `image` field in a pod (`containers` and `initContainers`) to
 use a proxy registry (docker registry for instance).
 
 See the unit tests in `mutate/mutate_test.go` for patching examples.
-Note that the image must be stored in a registry different than the
+Note that this image must be stored in a registry different than the
 Docker Hub. Otherwise you may have a chicken and egg problem.
 
 The simple solution to unblock yourself when the proxy doesn't work for instance
