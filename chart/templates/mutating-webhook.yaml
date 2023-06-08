@@ -12,7 +12,8 @@ webhooks:
   rules:
   - apiGroups:   [""]
     apiVersions: ["v1"]
-    operations:  ["CREATE"]
+    operations:
+      - "*"
     resources:   ["pods"]
   clientConfig:
     service:
