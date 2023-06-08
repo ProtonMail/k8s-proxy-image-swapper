@@ -51,4 +51,4 @@ spec:
             path: config.yaml
       - name: k8s-proxy-image-swapper-tls-secret
         secret:
-          secretName: k8s-proxy-image-swapper-tls-secret
+          secretName: webhook-certificate
