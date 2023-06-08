@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: k8s-proxy-image-swapper-config
-  namespace: {{ namespace }}
+  namespace: {{ .Values.namespace }}
 data:
   config.yaml: |
 {{ .Values.config | toYaml | indent 4 -}}

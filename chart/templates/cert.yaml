@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: webhook-certificate
+  namespace: {{ .Values.namespace }}
+spec:
+  secretName: webhook-certificate
+  dnsNames:
+  - k8s-pisw.{{ .Values.namespace }}.svc
+  issuerRef:
+    name: selfsigned-webhook
