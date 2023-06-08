@@ -156,8 +156,8 @@ func GetPatchedImageUrl(img, registry string) string {
 	return patchimg.String()
 }
 
-func getPatchFromContainerList(ctn []corev1.Container, registry, containerType string) []map[string]string {
-	patchList := []map[string]string{}
+func getPatchFromContainerList(ctn []corev1.Container, registry, containerType string) []map[string]interface{} {
+	patchList := []map[string]interface{}{}
 	for i := range ctn {
 		img := ctn[i].Image
 
@@ -168,7 +168,7 @@ func getPatchFromContainerList(ctn []corev1.Container, registry, containerType s
 			continue
 		}
 
-		patch := map[string]string{
+		patch := map[string]interface{}{
 			"op":    "replace",
 			"path":  fmt.Sprintf("/spec/%s/%d/image", containerType, i),
 			"value": patchedImg,
@@ -220,10 +220,14 @@ func Mutate(body []byte, verbose bool, registry string) ([]byte, error) {
 
 	patchList := getPatchFromContainerList(pod.Spec.Containers, registry, "containers")
 	patchList = append(patchList, getPatchFromContainerList(pod.Spec.InitContainers, registry, "initContainers")...)
-	annotationsPatch := map[string]string{
+        if pod.ObjectMeta.Annotations == nil {
+        }
+	annotationsPatch := map[string]interface{}{
 		"op":    "add",
-		"path":  "/metadata/annotations/k8s-proxy-image-swapper",
-		"value": "patched-image",
+		"path":  "/metadata/annotations",
+                "value": map[string]string {
+                    "k8s-proxy-image-swapper": "patched-image",
+                },
 	}
 	if len(patchList) != 0 {
 		patchList = append(patchList, annotationsPatch)
