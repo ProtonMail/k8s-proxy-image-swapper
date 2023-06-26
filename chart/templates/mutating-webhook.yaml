@@ -5,6 +5,8 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: "k8s-proxy-image-swapper-webhook"
   namespace: {{ .Values.namespace }}
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Values.namespace }}/webhook-certificate
 webhooks:
 - name: "k8s-pisw.{{ .Values.namespace }}.svc"
   rules:
@@ -13,7 +15,6 @@ webhooks:
     operations:  ["CREATE"]
     resources:   ["pods"]
   clientConfig:
-    caBundle: {{ .Values.caBundle }}
     service:
       namespace: {{ .Values.namespace }}
       name: "k8s-pisw"

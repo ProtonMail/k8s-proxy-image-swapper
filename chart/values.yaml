@@ -15,12 +15,12 @@ enableMutatingWebhook: true
 config:
   port: 8443
   # change tlsdirpath path accordingly if you change this
-  tlskeypath: "/tls/key.pem"
+  tlskeypath: "/tls/tls.key"
   ignoreimages:
     - registry
     - registry.example.com/toto/k8s-proxy-image-swapper
   # change tlsdirpath path accordingly if you change this
-  tlscertpath: "/tls/cert.pem"
+  tlscertpath: "/tls/tls.crt"
 
 securityContext:
  #capabilities:
